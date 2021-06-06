@@ -1,26 +1,27 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+const mongoose = require("mongoose");
 
 const postsRoutes = require("./routes/posts");
 const userRoutes = require("./routes/user");
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 mongoose
   .connect(
-    "mongodb+srv://projetomtw:987654321@cluster0.u25pk.mongodb.net/test?retryWrites=true&w=majority",
-    { useUnifiedTopology: true, useNewUrlParser: true }
+ "mongodb+srv://eva:<password>@cluster0-2zrmd.mongodb.net/test?retryWrites=true&w=majority",
+    { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(() => {
-    console.log("Connected to database!");
+    console.log("connected do db");
   })
   .catch(() => {
-    console.log("Connection failed!");
+    console.log("Connection failed");
   });
- 
+
+
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -32,6 +33,43 @@ app.use((req, res, next) => {
     "GET, POST, PUT, DELETE, PATCH, OPTIONS"
   );
   next();
+});
+
+
+app.post("/api/posts", (req, res, next) => {
+
+  const post = new Post({
+    title: req.body.title,
+    content: req.body.content,
+  });
+  console.log(post);
+  post.save();
+  res.status(201).json({
+    message: "Post added",
+  });
+});
+
+app.get("/api/posts/:id", (req, res, next) => {
+  Post.findById(req.params.id)
+  .then((post) => {
+      if (post) {
+        res.status(200).json(post);
+      } else {
+        res.status(404).json({ message: "Post not found!" });
+      }
+  });
+});
+
+app.put("/api/posts/:id", (req, res, next) => {
+  const post = new Post({
+    _id: req.body.id,
+    title: req.body.title,
+    content: req.body.content,
+  });
+
+  Post.updateOne({ _id: req.params.id }, post).then((result) => {
+    res.status(200).json({ message: "Update successful!" });
+  });
 });
 
 app.use("/api/posts", postsRoutes);

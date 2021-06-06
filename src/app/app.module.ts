@@ -1,3 +1,4 @@
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from "@angular/forms";
@@ -29,6 +30,7 @@ import { LoginComponent } from "./auth/login/login.component";
     SignupComponent,
   ],
   imports: [
+    MatPaginatorModule,
     BrowserModule,
     FormsModule,
     BrowserAnimationsModule,
