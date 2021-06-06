@@ -9,7 +9,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { HttpClientModule } from '@angular/common/http';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { HTTP_INTERCEPTORS } from "@angular/common/http";
 
+import { AuthInterceptor } from "./auth/auth-interceptor";
 import { AppComponent } from './app.component';
 import { PostCreateComponent } from './posts/post-create/post-create.component';
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
@@ -44,7 +46,9 @@ import { LoginComponent } from "./auth/login/login.component";
     AppRoutingModule,
     MatProgressSpinnerModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
