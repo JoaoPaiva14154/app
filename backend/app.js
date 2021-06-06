@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 mongoose
   .connect(
- "mongodb+srv://eva:<password>@cluster0-2zrmd.mongodb.net/test?retryWrites=true&w=majority",
+    "mongodb+srv://projetomtw:987654321@cluster0.u25pk.mongodb.net/test?retryWrites=true&w=majority",
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(() => {
