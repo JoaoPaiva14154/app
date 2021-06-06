@@ -1,19 +1,23 @@
+<!-- <mat-toolbar color="primary">
+  <span *ngIf="toolbarPosts >= 1" [matBadge]="toolbarPosts" matBadgeOverlap="false">My posts</span>
+  <span *ngIf="toolbarPosts == 0" >My Posts</span>
+</mat-toolbar> -->
+
 <mat-toolbar color="primary">
-    <span><a routerLink="/">MyMessages</a></span>
-    <span class="spacer"></span>
-    <ul>
-      <li>
-        <a mat-button routerLink="/create" routerLinkActive="mat-accent"
-          >New Post</a
-        >
-      </li>
-      <li>
-        <a mat-button routerLink="/signup" routerLinkActive="mat-accent"
-          >Signup</a
-        >
-      </li>
-      <li>
-        <a mat-button routerLink="/login" routerLinkActive="mat-accent">Login</a>
-      </li>
-    </ul>
-</mat-toolbar>  
+  <span><a routerLink="/">MyMessages</a></span>
+  <span class="spacer"></span>
+  <ul>
+    <li *ngIf="userIsAuthenticated">
+      <a mat-button routerLink="/create" routerLinkActive="mat-accent">New Post</a>
+    </li>
+    <li *ngIf="!userIsAuthenticated">
+      <a mat-button routerLink="/signup" routerLinkActive="mat-accent">Signup</a>
+    </li>
+    <li *ngIf="!userIsAuthenticated">
+      <a mat-button routerLink="/login" routerLinkActive="mat-accent">Login</a>
+    </li>
+    <li *ngIf="userIsAuthenticated">
+      <button mat-button (click)="onLogout()">Logout</button>
+    </li>
+  </ul>
+</mat-toolbar>

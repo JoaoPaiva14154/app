@@ -6,13 +6,8 @@
     </mat-expansion-panel-header>
     <p>{{ post.content }}</p>
     {{ post.id }}
-    <mat-action-row>
-      <button
-        mat-button
-        color="primary"
-        [routerLink]="['/edit', post.id]"
-        routerLinkActive="router-link-active"
-      >
+    <mat-action-row *ngIf="userIsAuthenticated">
+      <button mat-button color="primary" [routerLink]="['/edit', post.id]" routerLinkActive="router-link-active">
         EDIT
       </button>
       <button mat-button color="warn" (click)="onDelete(post.id)">
@@ -21,13 +16,8 @@
     </mat-action-row>
   </mat-expansion-panel>
 </mat-accordion>
-<mat-paginator
-  [length]="totalPosts"
-  [pageSize]="postsPerPage"
-  [pageSizeOptions]="[2, 5, 10, 50]"
-  (page)="onChangePage($event)"
-  *ngIf="posts.length > 0"
->
+<mat-paginator [length]="totalPosts" [pageSize]="postsPerPage" [pageSizeOptions]="[2, 5, 10, 50]"
+  (page)="onChangePage($event)" *ngIf="posts.length > 0">
 </mat-paginator>
 <p class="info-text mat-body-1" *ngIf="posts.length <= 0 && !isLoading">
   No posts added yet!

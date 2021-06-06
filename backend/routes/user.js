@@ -2,41 +2,40 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-
 const User = require("../models/user");
 
 const router = express.Router();
 
 router.post("/signup", (req, res, next) => {
   User.findOne({ email: req.body.email })
-   .then((user) => {
-     if (user) {
-       res.status(201).json({
-         message: "Email exists !",
-       });
-     } else {
-       bcrypt.hash(req.body.password, 10).then((hash) => {
-         const user = new User({
-           email: req.body.email,
-           password: hash,
-         });
-         user
-           .save()
-           .then((result) => {
-             res.status(201).json({
-               message: "User created!",
-               result: result,
-             });
-           })
-           .catch((err) => {
-             res.status(500).json({
-               error: err,
-             });
-           });
-       });
-     }
-   })
-   .catch();
+    .then((user) => {
+      if (user) {
+        res.status(201).json({
+          message: "Email exists !",
+        });
+      } else {
+        bcrypt.hash(req.body.password, 10).then((hash) => {
+          const user = new User({
+            email: req.body.email,
+            password: hash,
+          });
+          user
+            .save()
+            .then((result) => {
+              res.status(201).json({
+                message: "User created!",
+                result: result,
+              });
+            })
+            .catch((err) => {
+              res.status(500).json({
+                error: err,
+              });
+            });
+        });
+      }
+    })
+    .catch();
 });
 
 router.post("/login", (req, res, next) => {
@@ -49,6 +48,11 @@ router.post("/login", (req, res, next) => {
       fetchedUser = user;
       return bcrypt.compare(req.body.password, user.password);
     })
+    .catch((err) => {
+      return res.status(401).json({
+        error: err,
+      });
+    })
     .then((result) => {
       if (!result) {
         return res.status(401).json({
@@ -60,16 +64,19 @@ router.post("/login", (req, res, next) => {
         "secret_this_should_be_longer",
         { expiresIn: "1h" }
       );
-      // console.log("ok");
       res.status(200).json({
         token: token,
+        expiresIn: 3600,
       });
     })
     .catch((err) => {
+      console.log("5");
       return res.status(401).json({
         message: "Auth failed",
       });
     });
 });
+
+router.post("/login", (req, res, next) => {});
 
 module.exports = router;
